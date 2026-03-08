@@ -1,5 +1,5 @@
 ---
-name: laravel-prod-review
+name: laravel-prod-ready
 description: >
   Run a comprehensive production readiness audit on a Laravel application. Use this skill
   whenever someone wants to know if their Laravel app is ready to ship, launch, or go live —
