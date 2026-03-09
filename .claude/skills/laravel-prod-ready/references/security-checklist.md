@@ -38,7 +38,7 @@ Check if any `.env` files are tracked:
 Glob: **/.env, **/.env.local, **/.env.production, **/.env.staging
 ```
 
-If `.env` files exist in the repo, read them and check if they contain real credentials (not the default Laravel placeholder values like `password` or `your-app-key`).
+If `.env` files exist in the repo, read them and check if they contain real credentials (not the default Laravel placeholder values like `password` or `your-app-key`). Evaluate values by their length, format, and entropy — real credentials are typically long, random strings. **When reporting any credential values in the audit output, always replace the actual value with `[REDACTED]`.** Report the variable name, file path, and why the value appears to be a real credential, but never include the credential itself.
 
 **Why it matters:** `.env` files contain `APP_KEY`, database credentials, mail credentials, API keys, and other secrets. If committed, they're in git history forever.
 

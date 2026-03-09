@@ -148,6 +148,17 @@ Read `references/report-template.md` and produce the final report using that exa
 - **Read** — Inspect specific files for context and line-level findings
 - **Never use Edit, Write, or Bash** — this is a read-only audit
 
+### Secret Redaction
+
+When reporting any finding that involves a secret, credential, API key, token, or password:
+
+- **NEVER** include the actual secret value in the report output
+- Report the **file path**, **line number**, **secret type**, and **variable name**
+- Always replace the actual value with `[REDACTED]` in any quoted code or output
+- It is acceptable to mention the key prefix (e.g. `sk_live_...`, `AKIA...`) since prefixes are public knowledge used for identification, but never include the full value
+
+This applies to all sections of the report: findings, code snippets, fix examples, and inline references.
+
 ### Tone
 
 This audit is most useful when it's direct without being alarmist. A missing rate limiter is a
@@ -170,7 +181,7 @@ handle honest feedback.
 **Reference:** CWE-798
 **File:** `config/services.php:18`
 **Finding:** Stripe secret key is hardcoded instead of using `env()`:
-  `'secret' => 'sk_live_abc123...'`
+  `'secret' => '[REDACTED]'`
 **Why it matters:** This key is committed to git history and visible to anyone with repo access.
   It grants full access to your Stripe account — charges, refunds, customer data.
 **Fix:**
@@ -179,7 +190,7 @@ handle honest feedback.
       'secret' => env('STRIPE_SECRET'),
   ],
   // .env
-  STRIPE_SECRET=sk_live_abc123...
+  STRIPE_SECRET=your-stripe-secret-key
 ```
 
 ### Example finding (WARNING)

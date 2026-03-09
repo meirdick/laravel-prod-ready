@@ -42,7 +42,7 @@ These issues pose serious risk and should be fixed before going to production.
 **Severity:** CRITICAL
 **Reference:** {CWE-XXX or OWASP category, if applicable}
 **File:** `{file path}:{line number}`
-**Finding:** {what was found}
+**Finding:** {what was found — if a secret/credential is involved, use [REDACTED] in place of the actual value}
 **Why it matters:** {plain language explanation}
 **Fix:**
 ```{language}
