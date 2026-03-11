@@ -111,6 +111,12 @@ codebase there might be...") are not useful. Be specific.
 - **WARNING** — Meaningful risk or debt that should be addressed soon (e.g. missing rate limiting, no eager loading, no queue worker)
 - **SUGGESTION** — Would improve quality or resilience but isn't a blocker (e.g. missing Telescope auth gate, no monitoring)
 
+### Credential Redaction (Mandatory)
+
+When reporting findings that contain secrets, API keys, passwords, or tokens, ALWAYS redact
+the actual value. Show only the first 4 characters followed by `••••••••`. Never output full
+credential values in the report. Example: `sk_live_••••••••`, `AKIA••••••••`, `ghp_••••••••`.
+
 ### Step 3: Score Each Dimension
 
 Score each dimension 0–10 using the rubric in `references/report-template.md`.
@@ -148,17 +154,6 @@ Read `references/report-template.md` and produce the final report using that exa
 - **Read** — Inspect specific files for context and line-level findings
 - **Never use Edit, Write, or Bash** — this is a read-only audit
 
-### Secret Redaction
-
-When reporting any finding that involves a secret, credential, API key, token, or password:
-
-- **NEVER** include the actual secret value in the report output
-- Report the **file path**, **line number**, **secret type**, and **variable name**
-- Always replace the actual value with `[REDACTED]` in any quoted code or output
-- It is acceptable to mention the key prefix (e.g. `sk_live_...`, `AKIA...`) since prefixes are public knowledge used for identification, but never include the full value
-
-This applies to all sections of the report: findings, code snippets, fix examples, and inline references.
-
 ### Tone
 
 This audit is most useful when it's direct without being alarmist. A missing rate limiter is a
@@ -181,7 +176,7 @@ handle honest feedback.
 **Reference:** CWE-798
 **File:** `config/services.php:18`
 **Finding:** Stripe secret key is hardcoded instead of using `env()`:
-  `'secret' => '[REDACTED]'`
+  `'secret' => 'sk_live_••••••••'`
 **Why it matters:** This key is committed to git history and visible to anyone with repo access.
   It grants full access to your Stripe account — charges, refunds, customer data.
 **Fix:**
@@ -190,7 +185,7 @@ handle honest feedback.
       'secret' => env('STRIPE_SECRET'),
   ],
   // .env
-  STRIPE_SECRET=your-stripe-secret-key
+  STRIPE_SECRET=<value from secrets manager>
 ```
 
 ### Example finding (WARNING)

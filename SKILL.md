@@ -111,6 +111,12 @@ codebase there might be...") are not useful. Be specific.
 - **WARNING** — Meaningful risk or debt that should be addressed soon (e.g. missing rate limiting, no eager loading, no queue worker)
 - **SUGGESTION** — Would improve quality or resilience but isn't a blocker (e.g. missing Telescope auth gate, no monitoring)
 
+### Credential Redaction (Mandatory)
+
+When reporting findings that contain secrets, API keys, passwords, or tokens, ALWAYS redact
+the actual value. Show only the first 4 characters followed by `••••••••`. Never output full
+credential values in the report. Example: `sk_live_••••••••`, `AKIA••••••••`, `ghp_••••••••`.
+
 ### Step 3: Score Each Dimension
 
 Score each dimension 0–10 using the rubric in `references/report-template.md`.
@@ -170,7 +176,7 @@ handle honest feedback.
 **Reference:** CWE-798
 **File:** `config/services.php:18`
 **Finding:** Stripe secret key is hardcoded instead of using `env()`:
-  `'secret' => 'sk_live_abc123...'`
+  `'secret' => 'sk_live_••••••••'`
 **Why it matters:** This key is committed to git history and visible to anyone with repo access.
   It grants full access to your Stripe account — charges, refunds, customer data.
 **Fix:**
@@ -179,7 +185,7 @@ handle honest feedback.
       'secret' => env('STRIPE_SECRET'),
   ],
   // .env
-  STRIPE_SECRET=sk_live_abc123...
+  STRIPE_SECRET=<value from secrets manager>
 ```
 
 ### Example finding (WARNING)
