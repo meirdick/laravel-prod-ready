@@ -15,6 +15,7 @@ license: MIT
 compatibility: Designed for Laravel applications (8.x through 12.x). Requires a PHP/Composer project.
 compatible_agents:
   - Claude Code
+  - Laravel Boost
   - Cursor
   - Windsurf
   - Amp
@@ -185,7 +186,7 @@ handle honest feedback.
       'secret' => env('STRIPE_SECRET'),
   ],
   // .env
-  STRIPE_SECRET=<value from secrets manager>
+  STRIPE_SECRET={value from secrets manager}
 ```
 
 ### Example finding (WARNING)
