@@ -4,13 +4,14 @@ description: >
   Run a comprehensive production readiness audit on a Laravel application. Use this skill
   whenever someone wants to know if their Laravel app is ready to ship, launch, or go live —
   even if they phrase it as "security check", "pre-launch review", "is this production-ready?",
-  "audit my project", "code review before deploy", "go-live checklist", or similar. Also
-  trigger when someone asks for help with security vulnerabilities, finding hardcoded secrets,
-  checking their CI/CD setup, or evaluating the reliability/scalability of their Laravel backend.
-  This skill systematically evaluates a Laravel project across 6 dimensions (Security,
-  Scalability, Reliability, Hardening, Code Quality, Operational Readiness) and produces a
-  scored report with actionable, Laravel-specific fixes — not just a list of problems, but a
-  clear picture of what's production-grade and what needs work.
+  "audit my project", "code review before deploy", "go-live checklist", "deploy checklist",
+  "launch readiness", "is this safe to deploy", or similar. Also trigger when someone asks for
+  help with security vulnerabilities, finding hardcoded secrets, checking their CI/CD setup,
+  evaluating the reliability/scalability of their Laravel backend, or asks "what am I missing
+  before launch". This skill systematically evaluates a Laravel project across 6 dimensions
+  (Security, Scalability, Reliability, Hardening, Code Quality, Operational Readiness) and
+  produces a scored report with actionable, Laravel-specific fixes — not just a list of
+  problems, but a clear picture of what's production-grade and what needs work.
 license: MIT
 compatibility: Designed for Laravel applications (8.x through 12.x). Requires a PHP/Composer project.
 compatible_agents:
@@ -51,7 +52,7 @@ Queues, Horizon, Livewire, Inertia, and the broader Laravel ecosystem.
 **Tools covered:** Composer, Artisan, Eloquent ORM, Laravel config system, Blade templates,
 Laravel HTTP client, Queue workers, Horizon, Telescope, Pulse, Forge, Vapor, Envoyer.
 
-**You must NEVER modify any project files. This is a read-only audit.**
+**This is a read-only audit.** Modifying files during an audit would make the findings unreliable and could break the project. Only use Glob, Grep, and Read tools.
 
 ---
 
@@ -164,6 +165,20 @@ catastrophe. Calibrate your language accordingly.
 When the project is in genuinely good shape, say so. When something is serious, be clear about
 why it's serious. Developers trust audits that treat them as intelligent professionals who can
 handle honest feedback.
+
+---
+
+## Gotchas
+
+- **Laravel 11+ has no `Http/Kernel.php`.** Middleware is registered in `bootstrap/app.php` instead. Don't flag missing Kernel.php as an issue on Laravel 11+ projects — check the Laravel version first.
+
+- **`APP_DEBUG=true` in `.env` isn't always a finding.** The `.env` file is for local development. Only flag it if `.env.production` or deployment configs have it set to true, or if there's evidence the `.env` file is used in production (e.g., no `.env.production` and deployment scripts reference `.env` directly).
+
+- **Missing tests isn't always WARNING-level.** A brand new project with 2 controllers doesn't need 80% coverage. Calibrate the severity to the project's maturity — check git log age and migration count.
+
+- **Telescope in `composer.json` isn't a vulnerability.** Telescope is typically installed as a dev dependency (`require-dev`). Only flag it if it's in `require` (not `require-dev`) AND there's no auth gate in `TelescopeServiceProvider`.
+
+- **Rate limiting may exist at the infrastructure level.** Before flagging missing rate limiting, check for Nginx/Apache configs, Cloudflare rules, or load balancer settings. Note: you can't always see these from code alone — mention it as a caveat rather than a definitive finding.
 
 ---
 
