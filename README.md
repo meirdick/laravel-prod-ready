@@ -13,7 +13,7 @@ A Claude Code skill that runs a comprehensive production readiness audit on Lara
 
 **Claude Code CLI:**
 ```bash
-claude skill add --from meirdick/laravel-prod-ready
+npx skills add meirdick/laravel-prod-ready
 ```
 
 **Laravel Cloud (Boost):**
